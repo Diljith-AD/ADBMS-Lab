@@ -1,0 +1,176 @@
+create table department(dept_id numeric(5),dept_name varchar(15), constraint dp1 primary key(dept_id));
+
+create table company(comp_id numeric(5),comp_name varchar(15),city varchar(15),no_of_employees numeric(6),emp_id numeric(5),constraint cp1 primary key(comp_id));
+
+create table employee(emp_id numeric(5),emp_name varchar(15),c_id numeric(6),designation varchar(15),salary numeric(7),city varchar(15),constraint ep1 primary key(emp_id));
+
+create table student(stud_id numeric(5),stud_name varchar(15),class varchar(4),city varchar(15),total_mark numeric(3),percentage numeric(3), dept_id numeric(5),constraint st12 primary key(stud_id),constraint st13 foreign key(dept_id) references department(dept_id));
+
+create table staff(staff_id numeric(5),staff_name varchar(15),dept_id numeric(5),designation varchar(15),salary numeric(7),city varchar(15),constraint sa1 primary key(staff_id),constraint sa2 foreign key(dept_id) references department(dept_id));
+
+INSERT INTO department values(101,'MCA');
+INSERT INTO department values(102,'MBA');
+INSERT INTO department values(103,'BTech');
+select * from department;
+
+INSERT INTO student values(1001,'Aakash','S2','Pathanamthitta',650,95,103);
+INSERT INTO student values(1002,'Jijo','S2','Trivandrum',640,90,101);
+INSERT INTO student values(1003,'Seetha','S6','Ernakulam',580,880,102);
+
+INSERT INTO staff values(201,'Sivasankar',102,'Professor',45000,'Ernakulam');
+INSERT INTO staff values(202,'Renjima',101,'Hod',70000,'Trivandrum');
+INSERT INTO staff values(203,'Yasar',103,'Advisor',50000,'Kollam');
+
+INSERT INTO employee values(3001,'Sulthan',301,'Engineer',35000,'Ernakulam');
+INSERT INTO employee values(3002,'Thasni',302,'Clerk',25000,'Trivandrum');
+INSERT INTO employee values(3003,'Yadu',303,'Manager',40000,'Ernakulam');
+
+INSERT INTO company values(301,'Dillu Tech','Ernakulam',5,3001);
+INSERT INTO company values(302,'Pappu Tech','Trivandrum',10,3002);
+INSERT INTO company values(303,'Neeli Tech','Ernakulam',15,3003);
+
+a.)select * from student ORDER BY dept_id;
+
+ STUD_ID STUD_NAME       CLAS CITY            TOTAL_MARK PERCENTAGE    DEPT_ID
+-------- --------------- ---- --------------- ---------- ---------- ----------
+    1002 Jijo            S2   Trivandrum             640         90        101
+    1003 Seetha          S6   Ernakulam              580        880        102
+    1001 Aakash          S2   Pathanamthitta         650         95        103
+
+b.)select emp_name from employee;
+
+EMP_NAME
+--------
+Sulthan
+Thasni
+Yadu
+
+c.)select * from staff where salary > 20000;
+
+ STAFF_ID STAFF_NAME         DEPT_ID DESIGNATION         SALARY CITY
+--------- --------------- ---------- --------------- ---------- --------------
+      201 Sivasankar             102 Professor            45000 Ernakulam
+      202 Renjima                101 Hod                  70000 Trivandrum
+      203 Yasar                  103 Advisor              50000 Kollam
+
+d.) select * from student where percentage > 80 and percentage < 90;
+
+no rows selected
+
+e.)select e.emp_id,e.emp_name,e.c_id,e.designation,e.salary,e.city from employee e,company c where e.c_id=c.comp_id and c.no_of_employees>3;
+
+ EMP_ID EMP_NAME              C_ID DESIGNATION         SALARY CITY
+------- --------------- ---------- --------------- ---------- --------------
+   3001 Sulthan                301 Engineer             35000 Ernakulam
+   3002 Thasni                 302 Clerk                25000 Trivandrum
+   3003 Yadu                   303 Manager              40000 Ernakulam
+
+f.) select s.staff_name,s.salary,s.city from staff s,student st where s.salary>25000 and s.city=st.city;
+
+STAFF_NAME          SALARY CITY
+--------------- ---------- ------------
+Renjima              70000 Trivandrum
+Sivasankar           45000 Ernakulam
+
+g.)select e.emp_id,e.emp_name,e.c_id,e.designation,e.salary,e.city from employee e,company c where c.no_of_employees=(select max(no_of_employees)from company) and e.c_id=c.comp_id;
+
+ EMP_ID EMP_NAME              C_ID DESIGNATION         SALARY CITY
+------- --------------- ---------- --------------- ---------- --------------
+   3003 Yadu                   303 Manager              40000 Ernakulam
+
+h.) update employee set salary=salary+salary*(8/100) where emp_id in(select e.emp_id from employee e,company c where e.city='Ernakulam' and e.designation='Clerk' and e.c_id=c.comp_id and e.city=c.city);
+
+0 rows updated
+
+i.) update staff set salary = salary + salary *(10/100) where designation = 'Professor';
+
+ STAFF_ID STAFF_NAME         DEPT_ID DESIGNATION         SALARY CITY
+--------- --------------- ---------- --------------- ---------- -------------
+      201 Sivasankar             102 Professor            49500 Ernakulam
+      202 Renjima                101 Hod                  70000 Trivandrum
+      203 Yasar                  103 Advisor              50000 Kollam
+
+j.) select e.emp_name from employee e,company c where e.city=c.city;
+
+EMP_NAME
+-----------
+Yadu
+Sulthan
+Thasni
+Yadu
+Sulthan
+
+k.) select count(s.staff_name) from staff s,department d order by d.dept_name;
+
+COUNT(S.STAFF_NAME)
+-------------------
+                  9
+
+l.) delete from company where no_of_employees < 5;
+
+0 rows selected
+
+m.) select d.dept_id,d.dept_name,st.stud_name,sf.staff_name from department d,student st,staff sf where d.dept_id=sf.dept_id and d.dept_id=st.dept_id order by d.dept_id;
+
+
+  DEPT_ID DEPT_NAME       STUD_NAME       STAFF_NAME
+--------- --------------- --------------- --------------
+      101 MCA             Jijo            Renjima
+      102 MBA             Seetha          Sivasankar
+      103 BTech           Aakash          Yasar
+
+n.) select d.dept_name,sf.staff_name from department d,staff sf where d.dept_id=sf.dept_id and sf.salary=(select max(salary) from staff);
+
+
+DEPT_NAME       STAFF_NAME
+--------------- --------------
+MCA             Renjima
+
+4) 
+	a)select s.name from student s join department d on s.deptid=d.deptid where d.name='MCA';
+	  select s.name from student s, department d where s.deptid=d.deptid and d.name='MCA';
+	
+	b) select * from student natural join department;
+
+	c) select emp_name,designation,salary,city from employee where c_id in (select comp_id from company where comp_name='tcs');
+
+5)
+	a)select to_char(current_date,'mm-dd-yyyy') from dual;
+	
+		TO_CHAR(CU
+		----------
+		03-22-2024
+select extract(day from current_date) day from dual;
+	
+       DAY
+----------
+        22
+SQL> select extract(month from current_date) Month from dual; 
+
+     MONTH
+----------
+         3
+SQL> select extract(year from current_date)Year from dual;
+
+      YEAR
+----------
+      2024
+
+
+b)SQL> select to_char(current_date,'HH24-MI-SS')TIME from dual;
+
+TIME
+--------
+14-55-25
+
+c)SQL> select to_char(current_date,'day month ddth yyyy')Yesterday from dual;
+
+YESTERDAY
+-----------------------------
+friday    march     22nd 2024
+
+d)SQL> select abs(to_date('01-06-2024','dd-mm-yyyy') -to_date('01-08-2024','dd-mm-yyyy'))days from dual;
+
+      DAYS
+----------
+        61
