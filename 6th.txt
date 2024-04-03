@@ -18,6 +18,9 @@ text:='Hello World';
 dbms_output.put_line(text);
 end;
 /
+
+Varibales
+
  declare
  x numeric(3);
  y numeric(3);
@@ -31,6 +34,8 @@ end;
  end;
  /
 
+Input
+
  declare
  x numeric(3);
  y numeric(3);
@@ -42,11 +47,36 @@ end;
  dbms_output.put_line('output is '||z);
  end;
  /
+IF a Number is Prime or Not
 
-
+declare
+n numeric(3);
+flag numeric(2):=0;
+begin
+n:=&n;
+flag:=0;
+for i in 2..n/2
+loop
+if mod(n,i)=0
+then
+flag:=1;
+exit;
+end if;
+end loop;
+if flag=0
+then
+dbms_output.put_line('It is a prime Number');
+else
+dbms_output.put_line('It is not a Prime Number');
+end if;
+end;
+/ 
 ----------------------------------------------------------------
 8)
-a)declare
+
+a)
+
+declare
 i numeric(2);
 n numeric(2);
 sum1 numeric(3):=0;
@@ -62,7 +92,10 @@ end loop;
 dbms_output.put_line('Sum is '||sum1);
 end;
 /
-b)declare
+
+b)
+
+declare
 n numeric(3);
 flag number(2):=0;
 begin
