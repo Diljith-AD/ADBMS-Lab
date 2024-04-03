@@ -1,0 +1,87 @@
+create table Employee3(empid numeric(3),name varchar(15),c_id numeric(3),designation varchar(15),salary numeric(6),city varchar(15), constraint pk2 primary key(empid));
+7) 
+a)create view emp as
+ select emp_name,designation,salary,city
+ from employee
+ where designation='Manager';
+
+ update emp set salary=salary+((1/10)*salary);
+----------------------------------------------------------
+			PL/SQL
+
+dbms_output.put_line('Hello World'||c)
+
+declare
+text varchar2(20);
+begin
+text:='Hello World';
+dbms_output.put_line(text);
+end;
+/
+ declare
+ x numeric(3);
+ y numeric(3);
+ z numeric(3);
+ begin
+ x:=3;
+ y:=4;
+
+ z:=x*y;
+ dbms_output.put_line('output is '||z);
+ end;
+ /
+
+ declare
+ x numeric(3);
+ y numeric(3);
+ z numeric(5);
+ begin
+ x:=&x;
+ y:=&y;
+ z:=x+y;
+ dbms_output.put_line('output is '||z);
+ end;
+ /
+
+
+----------------------------------------------------------------
+8)
+a)declare
+i numeric(2);
+n numeric(2);
+sum1 numeric(3):=0;
+
+begin
+n:=&n;
+
+for i in 1..n
+loop
+sum1:=sum1+i;
+end loop;
+
+dbms_output.put_line('Sum is '||sum1);
+end;
+/
+b)declare
+n numeric(3);
+flag number(2):=0;
+begin
+n:=&n;
+for i in 2..n
+loop
+flag:=0;
+for j in 2..i/2
+loop
+if mod(i,j)=0
+then
+flag:=1;
+exit;
+end if;
+end loop;
+if flag=0
+then
+dbms_output.put_line(i);
+end if;
+end loop;
+end;
+/

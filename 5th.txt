@@ -1,0 +1,47 @@
+SQL>  create table student3 (id numeric(3),name varchar(20), mark numeric(3));
+
+Table created.
+
+insert into student3 values(1,'Diljith',98);
+
+
+insert into student3 values(2,'Aakash',96);
+
+
+insert into student3 values(3,'Arjun',80);
+
+
+insert into student3 values(4,'Sreehari',50);
+
+
+SQL> select * from student3;
+
+        ID NAME                       MARK
+---------- -------------------- ----------
+         1 Diljith                      98
+         2 Aakash                       96
+         3 Arjun                        80
+         4 Sreehari                     50
+
+a)
+commit;
+savepoint student;
+rollback to studnet;
+
+b)
+create role teacher;
+grant select from student3 to teacher;
+grant select,insert,update,delete on student3 to teacher;
+revoke insert,delete on student3 to teacher;
+SQL> grant update(mark) on student3 to teacher;
+
+Grant succeeded.
+c) 
+create role new_student;
+Role created.
+grant select on student3 to new_student;
+Grant succeeded.
+grant update(name,mark) on student3 to new_student;
+Grant succeeded.
+revoke update on student3 from new_student;
+Revoke succeeded.
