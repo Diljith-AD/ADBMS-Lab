@@ -1,0 +1,51 @@
+create table hotel(hotelid numeric(3),name varchar2(15),no_of_rooms numeric(3),rate_per_day numeric(10), constraint ht1 primary key(hotelid));
+
+create table guest(guestid numeric(3),name varchar2(15),no_of_days numeric(3),hotelid numeric(3),constraint ht2 primary key(guestid),constraint htf1 foreign key(hotelid) references hotel(hotelid));
+
+alter table hotel modify name varchar(25);
+
+insert into hotel values(1,'Taj Mahal Palace',125,4450);
+insert into hotel values(2,'The Beverly Hills Hotel',160,6500);
+insert into hotel values(3,'The Oberoi',90,2500);
+insert into hotel values(4,'The Westin Gurgaon',85,3000);
+   HOTELID NAME                      NO_OF_ROOMS RATE_PER_DAY
+---------- ------------------------- ----------- ------------
+         3 The Oberoi                         90         2500
+         1 Taj Mahal Palace                  125         4450
+         2 The Beverly Hills Hotel           160         6500
+         4 The Westin Gurgaon                 85         3000
+
+insert into guest values(101,'Dave Batista',5,3);
+insert into guest values(102,'Dwayne Johnson',7,2);
+insert into guest values(103,'Michael Jordan',14,1);
+insert into guest values(104,'Aakash Udai',3,4);
+   GUESTID NAME            NO_OF_DAYS    HOTELID
+---------- --------------- ---------- ----------
+       101 Dave Batista             5          3
+       102 Dwayne Johnson           7          2
+       103 Michael Jordan          14          1
+       104 Aakash Udai              3          4
+
+9)
+declare
+rent number(10);
+cursor rent_cur is select g.guestid,g.name,g.no_of_days,h.hotelid,h.name,h.rate_per_day from guest g,hotel h where h.hotelid=g.hotelid;
+ID guest.guestid%type;
+NAME guest.name%type;
+DAYS guest.no_of_days%type;
+HOTELID hotel.hotelid%type;
+HOTEL_NAME hotel.name%type;
+HOTEL_RATE hotel.rate_per_day%type;
+begin
+open rent_cur;
+dbms_output.put_line('ID     NAME      DAYS        HOTELID     HOTEL_NAME    HOTEL_RATE       ');
+LOOP
+FETCH rent_cur into ID,NAME,DAYS,HOTELID,HOTEL_NAME,HOTEL_RATE;
+exit when rent_cur %notfound;
+rent:=0;
+rent:=DAYS*HOTEL_RATE;
+dbms_output.put_line(ID  ||'    '|| NAME  ||'     '||DAYS|| ' '|| HOTELID  ||'   '||HOTEL_NAME || '      Total Rate'||rent);
+end loop;
+close rent_cur;
+end;
+/
